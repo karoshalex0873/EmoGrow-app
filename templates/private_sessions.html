@@ -1,0 +1,130 @@
+<section id="private-sessions" class="py-4" style="max-height: 70vh; overflow-y: auto;">
+  <div class="container">
+    <h2 class="text-success mb-4 text-center">Submit an Issue</h2>
+
+    <!-- Issue Submission Form -->
+    <form method="POST" enctype="multipart/form-data" class="bg-light p-4 rounded shadow-sm">
+      {% csrf_token %}
+      
+      <div class="mb-3">
+        <label for="issue-type" class="form-label text-dark">Select Issue Type</label>
+        <select class="form-control" id="issue-type" name="issue_type" required>
+          <option value="">Choose Issue Type</option>
+          <option value="text">Text</option>
+          <option value="audio">Audio</option>
+          <option value="video">Video</option>
+        </select>
+      </div>
+
+      <!-- Text Issue Form -->
+      <div id="text-issue" class="issue-content" style="display: none;">
+        <div class="mb-3">
+          <label for="text-message" class="form-label text-dark">Describe Your Issue</label>
+          <textarea
+            class="form-control"
+            id="text-message"
+            name="text_message"
+            rows="4"
+            placeholder="Please describe your issue in detail"
+            style="border-color: #198754;"
+            required
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Audio Issue Form -->
+      <div id="audio-issue" class="issue-content" style="display: none;">
+        <div class="mb-3">
+          <label for="audio-message" class="form-label text-dark">Record or Upload Audio</label>
+          <input
+            type="file"
+            class="form-control"
+            id="audio-message"
+            name="audio_message"
+            accept="audio/*"
+            style="border-color: #198754;"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Video Issue Form -->
+      <div id="video-issue" class="issue-content" style="display: none;">
+        <div class="mb-3">
+          <label for="video-message" class="form-label text-dark">Record or Upload Video</label>
+          <input
+            type="file"
+            class="form-control"
+            id="video-message"
+            name="video_message"
+            accept="video/*"
+            style="border-color: #198754;"
+            required
+          />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">
+        <i class="fas fa-paper-plane"></i> Submit Issue
+      </button>
+    </form>
+
+    <!-- Display Submitted Issues -->
+    <h3 class="text-success mt-5">Submitted Issues</h3>
+    <div class="list-group">
+      {% for issue in issues %}
+      <div class="list-group-item d-flex justify-content-between align-items-start bg-white shadow-sm rounded mb-3">
+        <div>
+          <h5 class="mb-1 text-dark">{{ issue.student_name }}</h5>
+          <small class="text-muted">{{ issue.date }}</small>
+        </div>
+        
+        <div>
+          <p class="text-muted mb-3">{{ issue.issue_type}} Issue</p>
+          {% if issue.text_message %}
+          <p class="text-muted">{{ issue.text_message }}</p>
+          {% endif %}
+          {% if issue.audio_message %}
+          <audio controls>
+            <source src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          {% endif %}
+          {% if issue.video_message %}
+          <video controls>
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-muted text-center">No issues submitted yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Script to handle dynamic form display based on selected issue type
+  const issueTypeSelect = document.getElementById('issue-type');
+  const textIssue = document.getElementById('text-issue');
+  const audioIssue = document.getElementById('audio-issue');
+  const videoIssue = document.getElementById('video-issue');
+
+  issueTypeSelect.addEventListener('change', () => {
+    // Hide all issue forms initially
+    textIssue.style.display = 'none';
+    audioIssue.style.display = 'none';
+    videoIssue.style.display = 'none';
+    
+    // Show the selected issue type form
+    if (issueTypeSelect.value === 'text') {
+      textIssue.style.display = 'block';
+    } else if (issueTypeSelect.value === 'audio') {
+      audioIssue.style.display = 'block';
+    } else if (issueTypeSelect.value === 'video') {
+      videoIssue.style.display = 'block';
+    }
+  });
+</script>

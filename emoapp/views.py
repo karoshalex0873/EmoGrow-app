@@ -5,7 +5,12 @@ from emoAdmins.models import Assignment
 # Create your views here.
 def Getstarted(request):
     return render(request, "index.html")
-
+def About(request):
+    return render (request, 'about.html')
+def Contact(request):
+    return render(request ,'contact.html')
+def Pricing(request):
+    return render(request, 'pricing.html')
 
 def Main(request):
     if request.method == "POST":
