@@ -1,0 +1,42 @@
+{% extends 'starter-page.html' %}
+{% load static %}
+{% block body %}
+<section class="container mt-4">
+  <h1 class="text-center text-black mb-4">Notices</h1>
+
+  <div class="row">
+    {% for notice in notices %}
+      <div class="col-md-6 mb-4">
+        <div class="card border border-black shadow-sm bg-white">
+          <!-- Card Body -->
+          <div class="card-body">
+            <h5 class="card-title text-black">{{ notice.title }}</h5>
+            <p class="card-text text-muted">Posted on: {{ notice.date_posted }}</p>
+
+            {% if notice.is_pdf %}
+              <!-- PDF File Icon -->
+              <div class="d-flex align-items-center my-3">
+                <i class="bi bi-file-earmark-pdf-fill text-danger fs-3 me-2"></i>
+                <span class="text-muted">PDF File Attached</span>
+              </div>
+              <!-- File Actions -->
+              <div>
+                <!-- Download button -->
+                <a href="{{ notice.file.url }}" download class="btn btn-success text-white me-2">
+                  <i class="bi bi-download"></i> Download
+                </a>
+                <!-- Open button -->
+                <a href="{{ notice.file.url }}" target="_blank" class="btn btn-dark text-white">
+                  <i class="bi bi-box-arrow-up-right"></i> Open
+                </a>
+              </div>
+            {% else %}
+              <p class="text-muted mt-3">No PDF file available for this notice.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
