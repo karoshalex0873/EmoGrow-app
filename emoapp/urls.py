@@ -5,13 +5,13 @@ from emoapp import views
 
 urlpatterns = [
     path("", views.Getstarted, name="getstarted"),
-    path("about",views.About, name='about'),
+    path("about", views.About, name="about"),
     path("register/", views.Register, name="register"),
-    path('contact/',views.Contact, name='contact'),
-    path('price/',views.Pricing,name='price'),
+    path("contact/", views.Contact, name="contact"),
+    path("price/", views.Pricing, name="price"),
     path("login/", views.Login, name="login"),
+    path("show/", views.show_assignment, name="show"),
     path("main/", views.Main, name="main"),
-    path("notice/", views.notices, name="notice"),
 ]
 
 if settings.DEBUG:

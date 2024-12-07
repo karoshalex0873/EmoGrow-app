@@ -8,5 +8,6 @@ urlpatterns = [
     path("index/", views.admin_site, name="index"),
     path("loginAdmin/", views.adminLogin, name="loginAdmin"),
     path("upload/", views.Upload, name="upload"),
+    path("upload/delete/<int:assignment_id>/",views.delete_assigment,name='delete'),
     path("post-question/", views.post_question, name="post_question"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

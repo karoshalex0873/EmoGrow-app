@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from emoAdmins.forms import AssignmentForm, QuestionForm
 from django.contrib import messages
 from emoAdmins.models import Question, teacher, Assignment
@@ -18,7 +18,7 @@ def admin_site(request):
             return render(
                 request, "loginAdmin.html", {"error": "Invalid email or password"}
             )
-        return render(request, "admin.html")
+    return render(request, "admin.html")
 
 
 def adminLogin(request):
@@ -45,7 +45,6 @@ def post_question(request):
     if request.method == "POST":
         form = QuestionForm(request.POST)
         if form.is_valid():
-            # Save the question to the database
             form.save()
             messages.success(request, "Your question has been submitted successfully!")
             return redirect(
@@ -72,3 +71,11 @@ def post_question(request):
             "questions": questions,
         },
     )
+
+
+def delete_assigment(request, assignment_id):
+    assignment = get_object_or_404(Assignment, id=assignment_id)
+    assignment.delete()
+    messages.success(request, "Assignment deleted successfully!")
+    return redirect("upload")
+

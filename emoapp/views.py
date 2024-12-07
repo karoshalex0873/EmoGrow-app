@@ -2,15 +2,23 @@ from django.shortcuts import redirect, render
 from emoapp.models import Student
 from emoAdmins.models import Assignment
 
+
 # Create your views here.
 def Getstarted(request):
     return render(request, "index.html")
+
+
 def About(request):
-    return render (request, 'about.html')
+    return render(request, "about.html")
+
+
 def Contact(request):
-    return render(request ,'contact.html')
+    return render(request, "contact.html")
+
+
 def Pricing(request):
-    return render(request, 'pricing.html')
+    return render(request, "pricing.html")
+
 
 def Main(request):
     if request.method == "POST":
@@ -20,7 +28,7 @@ def Main(request):
             users = Student.objects.get(
                 email=request.POST["email"], password=request.POST["password"]
             )
-            return render(request, "main.html",{'user':users})
+            return render(request, "main.html", {"user": users})
         else:
             return render(request, "login.html", {"error": "Invalid credentials"})
     else:
@@ -46,16 +54,6 @@ def Login(request):
     return render(request, "login.html")
 
 
-def notices(request):
-    docs = Assignment.objects.all()
-    for doc in docs:
-        # Check if the file is a PDF
-        if doc.file:
-            file_extension = doc.file.name.split(".")[-1].lower()
-            if file_extension == "pdf":
-                doc.is_pdf = True
-            else:
-                doc.is_pdf = False
-        else:
-            doc.is_pdf = False
-    return render(request, "notice.html", {"notices": docs})
+def show_assignment(request):
+    student_assigment = Assignment.objects.all().order_by("title")
+    return render(request, "assignments.html", {"student_assigment": student_assigment})
