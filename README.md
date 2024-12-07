@@ -48,5 +48,5 @@ readme_content = """
 
 1. **Clone the repository:**  
    ```bash
-   git clone https://github.com/username/EmoGrow.git
+   https://github.com/karoshalex0873/EmoGrow-app.git
    cd EmoGrow
