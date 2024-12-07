@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from emoAdmins.forms import AssignmentForm
+from emoAdmins.forms import AssignmentForm, QuestionForm
 from django.contrib import messages
-from emoAdmins.models import teacher, Assignment
+from emoAdmins.models import Question, teacher, Assignment
+from emoAdmins.forms import AssignmentForm
 
 
 def admin_site(request):
@@ -9,26 +10,65 @@ def admin_site(request):
         if teacher.objects.filter(
             email=request.POST["email"], password=request.POST["password"]
         ).exists():
-            return render(request, "admin.html")
+            users = teacher.objects.get(
+                email=request.POST["email"], password=request.POST["password"]
+            )
+            return render(request, "admin.html",{'user':users})
         else:
             return render(
                 request, "loginAdmin.html", {"error": "Invalid email or password"}
             )
-    return render(request, "admin.html")
+        return render(request, "admin.html")
 
 
 def adminLogin(request):
     return render(request, "loginAdmin.html")
 
 
-def show_assignments(request):
+def Upload(request):
     if request.method == "POST":
-        title = request.POST.get("title")  # Fetch the title from the form
-        uploaded_file = request.FILES.get("file")  # Get the uploaded file
-        if title and uploaded_file:
-            # Save the assignment
-            Assignment.objects.create(title=title, file=uploaded_file)
-            return redirect("show_assignments")  # Redirect to the same page
-    # Retrieve all assignments
-    docs = Assignment.objects.all()
-    return render(request, "upload_assignments.html", {"docs": docs})
+        form = AssignmentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Assignment uploaded successfully!")
+            return redirect("upload")
+        else:
+            messages.error(request, "Error uploading assignment. Please try again.")
+    else:
+        form = AssignmentForm()
+    assignments = Assignment.objects.all()  # Fetch all uploaded assignments
+    return render(request, "admin.html", {"form": form, "docs": assignments})
+
+
+def post_question(request):
+    """Handles posting and displaying questions."""
+    if request.method == "POST":
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            # Save the question to the database
+            form.save()
+            messages.success(request, "Your question has been submitted successfully!")
+            return redirect(
+                "post_question"
+            )  # Redirect to the same page after submission
+        else:
+            messages.error(
+                request,
+                "There was an error submitting your question. Please try again.",
+            )
+    else:
+        form = QuestionForm()
+
+    # Fetch all questions to display
+    questions = Question.objects.all().order_by(
+        "-created_at"
+    )  # Assuming 'created_at' is a timestamp in the model
+
+    return render(
+        request,
+        "post_question.html",
+        {
+            "form": form,
+            "questions": questions,
+        },
+    )

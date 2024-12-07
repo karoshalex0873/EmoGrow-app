@@ -1,5 +1,8 @@
 <section id="upload-assignments" class="container-fluid py-4 px-3">
-  <div class="bg-white text-dark p-4 rounded shadow-sm mx-auto" style="max-width: 800px;">
+  <div
+    class="bg-white text-dark p-4 rounded shadow-sm mx-auto"
+    style="max-width: 800px"
+  >
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="fs-5 d-flex align-items-center">
@@ -17,17 +20,25 @@
     <!-- Assignment List -->
     <ul class="list-group list-group-flush">
       {% for assignment in docs %}
-      <li class="list-group-item d-flex justify-content-between align-items-center bg-light border-0 mb-2 rounded">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center bg-light border-0 mb-2 rounded"
+      >
+        <p>{{assignment.title}}</p>
         <span>
-          <i class="fas fa-file-alt text-success me-2"></i> {{ assignment.title }}
+          <!-- <i class="fas fa-file-alt text-success me-2"></i>
+          <p>{{ assignment.title }}</p> -->
         </span>
-        <a href="{{ assignment.file.url }}" class="btn btn-sm btn-outline-primary">
+        <a
+          href="{{ assignment.file.url }}"
+          class="btn btn-sm btn-outline-primary"
+        >
           <i class="fas fa-download"></i> Download
         </a>
       </li>
       {% empty %}
       <li class="list-group-item bg-light border-0 text-center">
-        <i class="fas fa-info-circle text-warning me-2"></i> No assignments uploaded yet.
+        <i class="fas fa-info-circle text-warning me-2"></i> No assignments
+        uploaded yet.
       </li>
       {% endfor %}
     </ul>
@@ -37,13 +48,21 @@
   <div
     id="add-assignment-modal"
     class="position-fixed top-50 start-50 translate-middle bg-white text-dark p-4 rounded shadow-lg d-none"
-    style="width: 90%; max-width: 500px; z-index: 1050;"
+    style="width: 90%; max-width: 500px; z-index: 1050"
   >
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h3 class="fs-6 mb-0">Add Assignment</h3>
-      <button class="btn-close" id="close-modal-btn" aria-label="Close"></button>
+      <button
+        class="btn-close"
+        id="close-modal-btn"
+        aria-label="Close"
+      ></button>
     </div>
-    <form method="POST" enctype="multipart/form-data">
+    <form
+      method="POST"
+      enctype="multipart/form-data"
+      action="{% url 'upload' %}"
+    >
       {% csrf_token %}
       <div class="mb-3">
         <label for="title" class="form-label fw-bold">Assignment Title</label>
@@ -57,7 +76,9 @@
         />
       </div>
       <div class="mb-3">
-        <label for="assignment-file" class="form-label fw-bold">Upload File</label>
+        <label for="assignment-file" class="form-label fw-bold"
+          >Upload File</label
+        >
         <input
           type="file"
           class="form-control"
@@ -70,6 +91,13 @@
         <i class="fas fa-upload me-2"></i> Upload
       </button>
     </form>
+    {% if messages %}
+    <div class="alert-messages">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
 </section>
 

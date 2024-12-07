@@ -13,7 +13,22 @@ class teacher(models.Model):
 
 class Assignment(models.Model):
     title = models.CharField(max_length=255)
-    file = models.FileField(upload_to="assignments/")  # Field for uploaded files
+    file = models.FileField(upload_to="assignments/")
+
+    def __str__(self):
+        return self.title
+
+
+class Question(models.Model):
+    title = models.CharField(max_length=200)
+    body = models.TextField()
+    status = models.CharField(
+        max_length=50, default="Pending"
+    )  # e.g., 'Pending', 'Answered'
+    response = models.TextField(
+        blank=True, null=True
+    )  
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
