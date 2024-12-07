@@ -1,58 +1,92 @@
-<section id="posting-questions" class="py-4" style="max-height: 70vh; overflow-y: auto;">
+<section
+  id="posting-questions"
+  class="py-4"
+  style="max-height: 60vh; overflow-y: auto"
+>
   <div class="container">
-    <h2 class="text-success mb-4">Post a Question</h2>
-
-    <!-- Post Question Form -->
-    <form method="POST" class="bg-light p-4 rounded shadow-sm">
-      {% csrf_token %}
-      <div class="mb-3">
-        <label for="question-title" class="form-label text-dark">Question Title</label>
-        <input
-          type="text"
-          class="form-control"
-          id="question-title"
-          name="title"
-          placeholder="Enter your question title"
-          required
-          style="border-color: #198754;"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="question-body" class="form-label text-dark">Details</label>
-        <textarea
-          class="form-control"
-          id="question-body"
-          name="body"
-          rows="5"
-          placeholder="Provide detailed context for your question"
-          required
-          style="border-color: #198754;"
-        ></textarea>
-      </div>
-      <button type="submit" class="btn btn-success w-100">
-        <i class="fas fa-paper-plane"></i> Submit Question
-      </button>
-    </form>
-
-    <!-- Questions List -->
-    <h3 class="text-success mt-5">Your Questions</h3>
-    <div class="list-group">
-      {% for question in questions %}
-      <div class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start bg-white shadow-sm rounded mb-3">
-        <div>
-          <h5 class="mb-1 text-dark">{{ question.title }}</h5>
-          <p class="mb-1 text-muted">{{ question.body }}</p>
-          <small class="text-success">Status: {{ question.status }}</small>
+    <!-- Section Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-success mb-4">Post a Question</h2>
+      <a
+        href="{% url 'questions' %}"
+        class="d-flex align-items-center text-decoration-none"
+      >
+        <h5 class="fs-5 d-flex align-items-center text-success">
+          <i
+            class="fas fa-external-link-alt text-success"
+            aria-hidden="true"
+          ></i>
+          show list
+        </h5>
+      </a>
+    </div>
+    <div class="row">
+      <!-- Column 1: Questions List -->
+      <div class="col-md-8">
+        <h3 class="text-success">Your Questions</h3>
+        <div class="list-group" style="max-height: 40vh; overflow-y: auto">
+          {% for question in question %}
+          <div
+            class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start bg-white shadow-sm rounded mb-3"
+          >
+            <div>
+              <h5 class="mb-1 text-dark">{{ question.title }}</h5>
+              <p class="mb-1 text-muted">{{ question.body }}</p>
+            </div>
+            {% if question.response %}
+            <div class="mt-3 mt-md-0 alert alert-success">
+              <strong>Response:</strong> {{ question.response }}
+            </div>
+            {% endif %}
+          </div>
+          {% empty %}
+          <p class="text-muted text-center">No questions posted yet.</p>
+          {% endfor %}
         </div>
-        {% if question.response %}
-        <div class="mt-3 mt-md-0 alert alert-success">
-          <strong>Response:</strong> {{ question.response }}
-        </div>
-        {% endif %}
       </div>
-      {% empty %}
-      <p class="text-muted text-center">No questions posted yet.</p>
-      {% endfor %}
+
+      <!-- Column 2: Form -->
+      <div class="col-md-4">
+        <h3 class="text-success">Post a New Question</h3>
+        <form
+          action="{% url 'questions' %}"
+          method="POST"
+          class="bg-light p-4 rounded shadow-sm"
+        >
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="question-title" class="form-label text-dark"
+              >Question Title</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="question-title"
+              name="title"
+              placeholder="Enter your question title"
+              required
+              style="border-color: #198754"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="question-body" class="form-label text-dark"
+              >What to be done</label
+            >
+            <textarea
+              class="form-control"
+              id="question-body"
+              name="body"
+              rows="5"
+              placeholder="Provide detailed context for your question"
+              required
+              style="border-color: #198754"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-success w-100">
+            <i class="fas fa-paper-plane"></i> Submit Question
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </section>

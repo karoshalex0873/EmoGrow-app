@@ -18,6 +18,12 @@
       <h2 class="fs-5 d-flex align-items-center">
         <i class="fas fa-upload text-success me-2"></i> Uploaded Assignments
       </h2>
+      <a href="{% url 'upload' %}" class="d-flex align-items-center text-decoration-none">
+        <h5 class="fs-5 d-flex align-items-center text-success ">
+          <i class="fas fa-external-link-alt text-success" aria-hidden="true"></i> show list
+        </h5>
+      </a>
+
       <button
         class="btn btn-outline-success btn-sm"
         id="add-assignment-btn"
@@ -39,7 +45,7 @@
         </p>
 
         <!-- Action Buttons -->
-        <div class="btn-group" role="group" style="gap: 10px;">
+        <div class="btn-group" role="group" style="gap: 10px">
           <!-- Download Button -->
           <a
             href="{{ assignment.file.url }}"

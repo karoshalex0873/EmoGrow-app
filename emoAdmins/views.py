@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from emoAdmins.forms import AssignmentForm, QuestionForm
+from emoAdmins.forms import AssignmentForm 
 from django.contrib import messages
 from emoAdmins.models import Question, teacher, Assignment
-from emoAdmins.forms import AssignmentForm
+from emoAdmins.forms import AssignmentForm,QuestionsForm
 
 
 def admin_site(request):
@@ -40,37 +40,19 @@ def Upload(request):
     return render(request, "admin.html", {"form": form, "docs": assignments})
 
 
-def post_question(request):
-    """Handles posting and displaying questions."""
+def Upload_Questions(request):
     if request.method == "POST":
-        form = QuestionForm(request.POST)
+        form=QuestionsForm(request.POST ,request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, "Your question has been submitted successfully!")
-            return redirect(
-                "post_question"
-            )  # Redirect to the same page after submission
+            messages.success(request, "Question posted successfully!")
+            return redirect("questions")
         else:
-            messages.error(
-                request,
-                "There was an error submitting your question. Please try again.",
-            )
+            messages.error(request,'Error uploading Questions. Please try again.')
     else:
-        form = QuestionForm()
-
-    # Fetch all questions to display
-    questions = Question.objects.all().order_by(
-        "-created_at"
-    )  # Assuming 'created_at' is a timestamp in the model
-
-    return render(
-        request,
-        "post_question.html",
-        {
-            "form": form,
-            "questions": questions,
-        },
-    )
+        form=QuestionsForm()
+    questions=Question.objects.all()
+    return render(request,"admin.html",{"form":form,"question":questions})
 
 
 def delete_assigment(request, assignment_id):
@@ -78,4 +60,3 @@ def delete_assigment(request, assignment_id):
     assignment.delete()
     messages.success(request, "Assignment deleted successfully!")
     return redirect("upload")
-

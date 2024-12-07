@@ -1,5 +1,5 @@
 from django.contrib import admin
-from emoAdmins.models import teacher, Assignment,Question
+from emoAdmins.models import Question, teacher, Assignment
 
 # Register your models here.
 admin.site.register(teacher)
