@@ -1,48 +1,72 @@
-<section id="posting-questions" class="py-4" style="max-height: 70vh; overflow-y: auto;" >
-  <div class="container">
-    <h2 class="text-success mb-4 text-center">Question & Response</h2>
-
-    <!-- Display the Question -->
-    <div class="bg-light p-4 rounded shadow-sm mb-4">
-      <h5 class="text-dark">{{ question.title }}</h5>
-      <p class="text-muted">{{ question.body }}</p>
-      <small class="text-success">Status: {{ question.status }}</small>
+<section id="posting-questions" class="py-3" style="background-color: #f8f9fa; height: 65vh;">
+  <div class="container h-100 d-flex flex-column">
+    <!-- Page Heading -->
+    <div class="text-center mb-4">
+      <h2 class="text-success fw-bold">Survey Questions</h2>
+      <p class="text-muted small">Share your feedback by answering these questions!</p>
+      <div class="d-flex justify-content-center align-items-center mt-2">
+        <a
+          href="{% url 'survey_questions' %}"
+          class="text-decoration-none text-success d-flex align-items-center fw-bold"
+          style="font-size: 1rem;"
+        >
+        <i class="fa fa-eye" aria-hidden="true"></i> Check Surveys
+        </a>
+      </div>
     </div>
 
-    <!-- Response Section -->
-    <div>
-      <h3 class="text-success mb-4">Submit Your Response</h3>
-      <form method="POST" action="" class="bg-light p-4 rounded shadow-sm">
-        {% csrf_token %}
-        
-        <!-- Response Textarea -->
-        <div class="mb-3">
-          <label for="response-body" class="form-label text-dark">Your Response</label>
-          <textarea
-            class="form-control"
-            id="response-body"
-            name="response"
-            rows="4"
-            placeholder="Provide your response here"
-            required
-          ></textarea>
-        </div>
+    <!-- Survey Questions Section -->
+    <div class="row justify-content-center flex-grow-1 overflow-auto">
+      <div class="col-lg-10">
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+            <h3 class="text-success fw-bold mb-3">Available Surveys</h3>
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-success w-100">
-          <i class="fas fa-paper-plane"></i> Submit Response
-        </button>
-      </form>
-    </div>
+            <div class="list-group" style="max-height: 50vh; overflow-y: auto;">
+              {% for question in questions %}
+              <div class="list-group-item bg-white p-3 rounded shadow-sm mb-3 border-0">
+                <h5 class="fw-bold text-dark mb-2">{{ question.title }}</h5>
+                <p class="text-muted small mb-3">{{ question.body }}</p>
 
-    <!-- Existing Response Display -->
-    {% if question.response %}
-      <div class="mt-5">
-        <h4 class="text-success">Response:</h4>
-        <div class="alert alert-success">
-          <strong>Response:</strong> {{ question.response }}
+                <!-- Display previous responses -->
+                {% if question.responses.all %}
+                <div class="mb-3">
+                  <h6 class="text-success fw-bold">Responses:</h6>
+                  <ul class="list-group small">
+                    {% for response in question.responses.all %}
+                    <li class="list-group-item p-2 border-0 bg-light mb-2 rounded">
+                      <span>{{ response.response_text }}</span>
+                      <span class="text-muted small d-block">Submitted: {{ response.submitted_at }}</span>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% endif %}
+
+                <!-- Response form -->
+                <form action="" method="POST" class="mt-2">
+                  {% csrf_token %}
+                  <input type="hidden" name="question_id" value="{{ question.id }}">
+                  <textarea
+                    class="form-control mb-2"
+                    name="response"
+                    placeholder="Write your answer..."
+                    rows="3"
+                    style="border-color: #198754;"
+                    required
+                  ></textarea>
+                  <button type="submit" class="btn btn-success btn-sm w-100">
+                    Submit Response
+                  </button>
+                </form>
+              </div>
+              {% empty %}
+              <p class="text-muted text-center">No survey questions available.</p>
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
-    {% endif %}
+    </div>
   </div>
 </section>

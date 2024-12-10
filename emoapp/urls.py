@@ -10,9 +10,7 @@ urlpatterns = [
     path("contact/", views.Contact, name="contact"),
     path("price/", views.Pricing, name="price"),
     path("login/", views.Login, name="login"),
-    path("show/", views.show_assignment, name="show"),
     path("main/", views.Main, name="main"),
-]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("assignment/", views.assignment_list, name="assignment"),
+    path("survey_questions/", views.survey_questions, name="survey_questions"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

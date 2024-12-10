@@ -20,10 +20,8 @@ def admin_site(request):
             )
     return render(request, "admin.html")
 
-
 def adminLogin(request):
     return render(request, "loginAdmin.html")
-
 
 def Upload(request):
     if request.method == "POST":
